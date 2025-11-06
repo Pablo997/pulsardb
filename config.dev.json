@@ -1,0 +1,14 @@
+{
+  "http": {
+    "address": "127.0.0.1",
+    "port": 8080
+  },
+  "storage": {
+    "data_dir": "./data",
+    "max_memory_mb": 256,
+    "flush_interval_seconds": 30,
+    "retention_days": 1,
+    "compression_enabled": false
+  }
+}
+
