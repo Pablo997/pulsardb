@@ -5,7 +5,7 @@ import (
 	"os"
 	"sync"
 
-	"github.com/yourusername/pulsardb/internal/config"
+	"github.com/Pablo997/pulsardb/internal/config"
 )
 
 // Engine is the main storage engine for time-series data

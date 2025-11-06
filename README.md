@@ -15,7 +15,7 @@ A lightweight, high-performance time-series database designed for edge computing
 ### Installation
 
 ```bash
-go get github.com/yourusername/pulsardb
+go get github.com/Pablo997/pulsardb
 ```
 
 ### Running the Server

@@ -1,4 +1,4 @@
-module github.com/yourusername/pulsardb
+module github.com/Pablo997/pulsardb
 
 go 1.21
 

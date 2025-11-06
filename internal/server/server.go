@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/yourusername/pulsardb/internal/config"
-	"github.com/yourusername/pulsardb/pkg/storage"
+	"github.com/Pablo997/pulsardb/internal/config"
+	"github.com/Pablo997/pulsardb/pkg/storage"
 )
 
 // Server represents the PulsarDB HTTP server
