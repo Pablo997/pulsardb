@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -17,6 +18,12 @@ type Server struct {
 	storage *storage.Engine
 	router  *mux.Router
 	server  *http.Server
+	
+	// Metrics
+	startTime      time.Time
+	pointsWritten  int64
+	queriesServed  int64
+	metricsMutex   sync.RWMutex
 }
 
 // New creates a new server instance
@@ -27,9 +34,10 @@ func New(cfg *config.Config) (*Server, error) {
 	}
 
 	s := &Server{
-		config:  cfg,
-		storage: engine,
-		router:  mux.NewRouter(),
+		config:    cfg,
+		storage:   engine,
+		router:    mux.NewRouter(),
+		startTime: time.Now(),
 	}
 
 	s.setupRoutes()
@@ -74,5 +82,28 @@ func (s *Server) setupRoutes() {
 	
 	// Metrics endpoint
 	s.router.HandleFunc("/metrics", s.handleMetrics).Methods("GET")
+}
+
+// incrementPointsWritten increments the points written counter
+func (s *Server) incrementPointsWritten(count int64) {
+	s.metricsMutex.Lock()
+	defer s.metricsMutex.Unlock()
+	s.pointsWritten += count
+}
+
+// incrementQueriesServed increments the queries served counter
+func (s *Server) incrementQueriesServed() {
+	s.metricsMutex.Lock()
+	defer s.metricsMutex.Unlock()
+	s.queriesServed++
+}
+
+// getMetrics returns current metrics (thread-safe)
+func (s *Server) getMetrics() (int64, int64, int64) {
+	s.metricsMutex.RLock()
+	defer s.metricsMutex.RUnlock()
+	
+	uptime := int64(time.Since(s.startTime).Seconds())
+	return s.pointsWritten, s.queriesServed, uptime
 }
 
