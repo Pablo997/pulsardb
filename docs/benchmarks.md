@@ -168,5 +168,5 @@ go test ./internal/server/ -bench=BenchmarkHandleWriteSinglePoint \
 - In-memory results (no persistence yet)
 - Production performance will include WAL overhead (~50μs)
 
-**Updated:** November 2024
+**Updated:** November 2025
 
