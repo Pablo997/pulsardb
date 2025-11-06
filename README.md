@@ -62,6 +62,7 @@ curl -X POST http://localhost:8080/query \
 - **[API Reference](docs/API.md)** - Complete API documentation
 - **[Examples](docs/examples.md)** - Usage examples (curl, PowerShell, code)
 - **[Architecture](docs/architecture.md)** - System design and internals
+- **[Benchmarks](docs/benchmarks.md)** - Performance metrics and comparisons
 
 ## Configuration
 
