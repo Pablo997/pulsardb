@@ -41,6 +41,14 @@ func TestDefaultConfig(t *testing.T) {
 	if !cfg.Storage.CompressionOn {
 		t.Error("expected compression_enabled=true")
 	}
+
+	if !cfg.Storage.WALEnabled {
+		t.Error("expected wal_enabled=true")
+	}
+
+	if cfg.Storage.WALPath != "./data/wal.log" {
+		t.Errorf("expected wal_path=./data/wal.log, got %s", cfg.Storage.WALPath)
+	}
 }
 
 func TestLoadNoFile(t *testing.T) {

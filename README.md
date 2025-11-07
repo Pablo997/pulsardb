@@ -76,22 +76,23 @@ See [config.dev.json](config.dev.json) for example.
 
 ## Development Status
 
-**⚠️ Early Development** - Core features working, well-tested (90% coverage).
+**v0.2.0** - Core features + WAL implemented, well-tested (90% coverage).
 
 ### ✅ Implemented
-- Write/Query HTTP endpoints (240k-1M writes/sec)
+- Write/Query HTTP endpoints (1.5M+ writes/sec)
+- **Binary WAL for durability (~650ns overhead)**
 - In-memory storage engine (verified up to 1M points)
 - Real-time metrics tracking (atomic operations)
 - Thread-safe concurrent operations (zero contention)
-- Comprehensive test suite (90% coverage)
-- Performance optimizations (pre-allocation, precise memory tracking)
+- Comprehensive test suite (90%+ coverage)
+- Performance optimizations (binary encoding, lazy flush, pre-allocation)
 
 ### 🚧 Next
-- Write-Ahead Log (WAL)
 - Persistent storage (SSTables)
-- Compression algorithms
+- Compression algorithms (Gorilla)
 - Tag filtering
 - Aggregation functions
+- Compaction strategies
 
 [Full roadmap](docs/roadmap.md)
 

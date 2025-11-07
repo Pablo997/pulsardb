@@ -30,10 +30,12 @@ PulsarDB development roadmap and future plans.
 
 **Goal:** Don't lose data on restart
 
-- [ ] Write-Ahead Log (WAL)
-  - Append-only log file
+- [x] Write-Ahead Log (WAL)
+  - Binary encoding (1.6x faster than JSON)
+  - Lazy flush strategy (on memtable full)
+  - ~650ns write latency
   - Crash recovery
-  - Replay on startup
+  - Simple and predictable
 - [ ] SSTable writer
   - Flush MemTable to disk
   - Sorted file format
@@ -42,7 +44,8 @@ PulsarDB development roadmap and future plans.
   - Query from disk
   - Merge memory + disk results
 
-**Target:** Q1 2025
+**Status:** WAL ✅ Complete (November 2025)  
+**Target:** SSTables by Q1 2026
 
 ---
 

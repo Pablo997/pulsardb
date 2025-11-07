@@ -24,6 +24,8 @@ type StorageConfig struct {
 	FlushInterval  int    `json:"flush_interval_seconds"`
 	RetentionDays  int    `json:"retention_days"`
 	CompressionOn  bool   `json:"compression_enabled"`
+	WALEnabled     bool   `json:"wal_enabled"`
+	WALPath        string `json:"wal_path"`
 }
 
 // Load loads configuration from file or returns defaults
@@ -58,6 +60,8 @@ func defaultConfig() *Config {
 			FlushInterval:  60,
 			RetentionDays:  7,
 			CompressionOn:  true,
+			WALEnabled:     true,
+			WALPath:        "./data/wal.log",
 		},
 	}
 }
