@@ -104,10 +104,15 @@ Multi-core:      168k queries/sec (concurrent)
 
 | Database | Single Write | Batch 100 | Query 1k pts | Architecture |
 |----------|--------------|-----------|--------------|--------------|
-| **PulsarDB** | **666 ns** | **46 μs** | **144 μs** | In-memory + WAL |
+| **PulsarDB** | **0.67 μs** | **46 μs** | **144 μs** | In-memory + WAL |
 | InfluxDB | ~50 μs | ~500 μs | ~500 μs | Disk-based |
 | Prometheus | ~20 μs | ~200 μs | ~300 μs | In-memory + disk |
 | TimescaleDB | ~100 μs | ~1 ms | ~1 ms | PostgreSQL |
+
+**PulsarDB vs InfluxDB:**
+- Single write: **75x faster** (0.67 μs vs 50 μs)
+- Batch 100: **11x faster** (46 μs vs 500 μs)
+- Query 1k: **3.5x faster** (144 μs vs 500 μs)
 
 **Note:** PulsarDB with binary WAL. With SSTables, expect:
 - Writes: 1-2 μs (still very fast)
