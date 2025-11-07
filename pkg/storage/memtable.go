@@ -28,8 +28,8 @@ func (mt *MemTable) Insert(point *DataPoint) error {
 	metric := point.Metric
 	mt.data[metric] = append(mt.data[metric], point)
 	
-	// Rough size estimation (will improve later)
-	mt.size += 64 // approximate bytes per point
+	// Track memory usage accurately
+	mt.size += point.ApproximateSize()
 
 	return nil
 }
@@ -44,8 +44,15 @@ func (mt *MemTable) Query(metric string, start, end int64) []*DataPoint {
 		return nil
 	}
 
+	// Pre-allocate result slice with estimated capacity
+	// This reduces allocations when we have many matching points
+	estimatedSize := len(points) / 2 // heuristic: usually query half the data
+	if estimatedSize < 10 {
+		estimatedSize = 10
+	}
+	result := make([]*DataPoint, 0, estimatedSize)
+	
 	// Filter by time range
-	result := make([]*DataPoint, 0)
 	for _, point := range points {
 		if point.Timestamp >= start && point.Timestamp <= end {
 			result = append(result, point)

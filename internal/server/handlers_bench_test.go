@@ -66,6 +66,14 @@ func BenchmarkHandleWriteBatch1000(b *testing.B) {
 	benchmarkHandleWriteBatch(b, 1000)
 }
 
+func BenchmarkHandleWriteBatch10000(b *testing.B) {
+	benchmarkHandleWriteBatch(b, 10000)
+}
+
+func BenchmarkHandleWriteBatch100000(b *testing.B) {
+	benchmarkHandleWriteBatch(b, 100000)
+}
+
 func benchmarkHandleWriteBatch(b *testing.B, batchSize int) {
 	cfg := &config.Config{
 		HTTP: config.HTTPConfig{
@@ -178,6 +186,14 @@ func BenchmarkHandleQueryMediumRange(b *testing.B) {
 
 func BenchmarkHandleQueryLargeRange(b *testing.B) {
 	benchmarkHandleQueryRange(b, 10000)
+}
+
+func BenchmarkHandleQueryXLargeRange(b *testing.B) {
+	benchmarkHandleQueryRange(b, 100000)
+}
+
+func BenchmarkHandleQueryMassiveRange(b *testing.B) {
+	benchmarkHandleQueryRange(b, 1000000)
 }
 
 func benchmarkHandleQueryRange(b *testing.B, dataPoints int) {

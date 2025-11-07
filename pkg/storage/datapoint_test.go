@@ -114,3 +114,76 @@ func TestDataPointEmptyTags(t *testing.T) {
 	}
 }
 
+func TestDataPointApproximateSize(t *testing.T) {
+	tests := []struct {
+		name  string
+		point *DataPoint
+		min   int64 // minimum expected size
+	}{
+		{
+			name: "simple point",
+			point: &DataPoint{
+				Metric:    "test",
+				Timestamp: 1000,
+				Value:     1.0,
+			},
+			min: 60, // metric(4) + timestamp(8) + value(8) + overhead(48) = 68
+		},
+		{
+			name: "point with tags",
+			point: &DataPoint{
+				Metric:    "temperature",
+				Timestamp: 1000,
+				Value:     23.5,
+				Tags: map[string]string{
+					"sensor":   "sensor1",
+					"location": "room1",
+				},
+			},
+			min: 90, // metric + timestamp + value + tags + overhead
+		},
+		{
+			name: "point with long metric name",
+			point: &DataPoint{
+				Metric:    "very_long_metric_name_for_testing_purposes",
+				Timestamp: 1000,
+				Value:     1.0,
+			},
+			min: 100,
+		},
+	}
+	
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			size := tt.point.ApproximateSize()
+			if size < tt.min {
+				t.Errorf("ApproximateSize() = %d, want at least %d", size, tt.min)
+			}
+			
+			// Size should be reasonable (not negative, not crazy large)
+			if size <= 0 || size > 10000 {
+				t.Errorf("ApproximateSize() = %d, unreasonable size", size)
+			}
+		})
+	}
+}
+
+func TestDataPointApproximateSizeConsistency(t *testing.T) {
+	point := &DataPoint{
+		Metric:    "test",
+		Timestamp: 1000,
+		Value:     1.0,
+		Tags: map[string]string{
+			"key": "value",
+		},
+	}
+	
+	// Calling multiple times should return same result
+	size1 := point.ApproximateSize()
+	size2 := point.ApproximateSize()
+	
+	if size1 != size2 {
+		t.Errorf("ApproximateSize() not consistent: %d vs %d", size1, size2)
+	}
+}
+

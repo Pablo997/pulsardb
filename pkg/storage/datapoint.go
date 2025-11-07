@@ -14,3 +14,20 @@ func (dp *DataPoint) Key() string {
 	return dp.Metric
 }
 
+// ApproximateSize calculates the approximate memory size of this data point
+func (dp *DataPoint) ApproximateSize() int64 {
+	size := int64(len(dp.Metric)) // metric string
+	size += 8                      // timestamp (int64)
+	size += 8                      // value (float64)
+	
+	// Tags
+	for k, v := range dp.Tags {
+		size += int64(len(k) + len(v))
+	}
+	
+	// Overhead: struct fields, pointers, map header
+	size += 48
+	
+	return size
+}
+

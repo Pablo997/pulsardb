@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -19,11 +19,10 @@ type Server struct {
 	router  *mux.Router
 	server  *http.Server
 	
-	// Metrics
-	startTime      time.Time
-	pointsWritten  int64
-	queriesServed  int64
-	metricsMutex   sync.RWMutex
+	// Metrics (atomic operations, no mutex needed)
+	startTime     time.Time
+	pointsWritten int64 // accessed via atomic
+	queriesServed int64 // accessed via atomic
 }
 
 // New creates a new server instance
@@ -84,26 +83,21 @@ func (s *Server) setupRoutes() {
 	s.router.HandleFunc("/metrics", s.handleMetrics).Methods("GET")
 }
 
-// incrementPointsWritten increments the points written counter
+// incrementPointsWritten atomically increments the points written counter
 func (s *Server) incrementPointsWritten(count int64) {
-	s.metricsMutex.Lock()
-	defer s.metricsMutex.Unlock()
-	s.pointsWritten += count
+	atomic.AddInt64(&s.pointsWritten, count)
 }
 
-// incrementQueriesServed increments the queries served counter
+// incrementQueriesServed atomically increments the queries served counter
 func (s *Server) incrementQueriesServed() {
-	s.metricsMutex.Lock()
-	defer s.metricsMutex.Unlock()
-	s.queriesServed++
+	atomic.AddInt64(&s.queriesServed, 1)
 }
 
-// getMetrics returns current metrics (thread-safe)
+// getMetrics returns current metrics (thread-safe via atomic loads)
 func (s *Server) getMetrics() (int64, int64, int64) {
-	s.metricsMutex.RLock()
-	defer s.metricsMutex.RUnlock()
-	
+	points := atomic.LoadInt64(&s.pointsWritten)
+	queries := atomic.LoadInt64(&s.queriesServed)
 	uptime := int64(time.Since(s.startTime).Seconds())
-	return s.pointsWritten, s.queriesServed, uptime
+	return points, queries, uptime
 }
 
