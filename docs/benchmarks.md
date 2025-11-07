@@ -181,9 +181,11 @@ go test ./internal/server/ -bench=BenchmarkHandleWriteSinglePoint \
 ### Query Scalability (1k → 1M points)
 
 ```mermaid
-graph LR
-    A[10k points<br/>2.47ms] --> B[100k points<br/>24ms]
-    B --> C[1M points<br/>288ms]
+xychart-beta
+    title "Query Latency vs Dataset Size"
+    x-axis [10k, 100k, 1M]
+    y-axis "Latency (ms)" 0 --> 300
+    line [2.47, 24, 288]
 ```
 
 **Linear scaling:** 10x data = ~10x time ✅
@@ -206,17 +208,6 @@ xychart-beta
 ```
 
 **Batching provides 4x throughput improvement.**
-
-### Concurrency Scaling
-
-```mermaid
-pie title "Concurrent Stress Test (1000x parallelism)"
-    "Write Time" : 2014
-    "No Contention" : 0
-    "No Degradation" : 0
-```
-
-**2014 ns/op at 1000x concurrency = ~500k writes/sec**
 
 ### Memory Efficiency
 
@@ -244,23 +235,10 @@ xychart-beta
 
 ## Production Capacity Estimates
 
-### Edge Device (512 MB RAM)
-
-```mermaid
-graph TD
-    A[512 MB RAM] --> B[~2.5M data points]
-    B --> C[240k writes/sec]
-    B --> D[Sub-second queries]
-```
-
-### Server (8 GB RAM)
-
-```mermaid
-graph TD
-    A[8 GB RAM] --> B[~40M data points]
-    B --> C[1M writes/sec]
-    B --> D[Thousands queries/sec]
-```
+| Device Type | RAM | Capacity | Write Speed | Query Speed |
+|-------------|-----|----------|-------------|-------------|
+| **Edge** | 512 MB | ~2.5M points | 240k/sec | Sub-second |
+| **Server** | 8 GB | ~40M points | 1M/sec | Thousands/sec |
 
 ---
 
