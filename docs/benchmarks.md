@@ -184,7 +184,9 @@ go test ./internal/server/ -bench=BenchmarkHandleWriteSinglePoint \
 graph LR
     A[10k points<br/>2.47ms] --> B[100k points<br/>24ms]
     B --> C[1M points<br/>288ms]
-    style C fill:#4CAF50
+    style A fill:#2196F3,stroke:#1976D2,stroke-width:2px,color:#fff
+    style B fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style C fill:#4CAF50,stroke:#388E3C,stroke-width:3px,color:#fff
 ```
 
 **Linear scaling:** 10x data = ~10x time ✅
@@ -199,6 +201,7 @@ graph LR
 | **100,000** | **93 ms** | **1M/sec** | **4x** |
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#2196F3','primaryTextColor':'#fff','primaryBorderColor':'#1976D2','lineColor':'#4CAF50','secondaryColor':'#FF9800','tertiaryColor':'#9C27B0'}}}%%
 xychart-beta
     title "Write Throughput (points/sec)"
     x-axis [Single, Batch-100, Batch-1k, Batch-100k]
@@ -222,6 +225,7 @@ pie title "Concurrent Stress Test (1000x parallelism)"
 ### Memory Efficiency
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#9C27B0','primaryTextColor':'#fff','primaryBorderColor':'#7B1FA2','lineColor':'#E91E63','secondaryColor':'#FF5722'}}}%%
 xychart-beta
     title "Memory Usage by Dataset Size"
     x-axis [10k, 100k, 1M]
@@ -252,6 +256,10 @@ graph TD
     A[512 MB RAM] --> B[~2.5M data points]
     B --> C[240k writes/sec]
     B --> D[Sub-second queries]
+    style A fill:#3F51B5,stroke:#303F9F,stroke-width:3px,color:#fff
+    style B fill:#00BCD4,stroke:#0097A7,stroke-width:2px,color:#fff
+    style C fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
+    style D fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff
 ```
 
 ### Server (8 GB RAM)
@@ -261,6 +269,10 @@ graph TD
     A[8 GB RAM] --> B[~40M data points]
     B --> C[1M writes/sec]
     B --> D[Thousands queries/sec]
+    style A fill:#673AB7,stroke:#512DA8,stroke-width:3px,color:#fff
+    style B fill:#FF9800,stroke:#F57C00,stroke-width:2px,color:#fff
+    style C fill:#8BC34A,stroke:#689F38,stroke-width:2px,color:#fff
+    style D fill:#8BC34A,stroke:#689F38,stroke-width:2px,color:#fff
 ```
 
 ---
